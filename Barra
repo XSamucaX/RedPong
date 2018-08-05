@@ -1,0 +1,56 @@
+package xingpong;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class Barra {
+	
+	public int barraNumero;
+	
+	public int x, y, largura=20, altura=250;
+	
+	public int pontos;
+	
+	public Barra(Xing xing, int barraNumero) {
+		
+		this.barraNumero = barraNumero;
+		
+		if (barraNumero == 1) {
+			this.x = 0;
+		}
+		if (barraNumero == 2) {
+			this.x = xing.largura - largura;
+		}
+		this.y = xing.largura / 2 - this.largura/2;
+	}
+
+	public void render(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(x, y, largura, altura);
+		
+	}
+
+	public void mover(boolean up) {
+		int veloc = 15;
+		
+		if (up) {
+			if (y - veloc > 0) {
+				y -= veloc;
+			}
+			else{
+				y = 0;
+		}
+		}
+		else{
+			if (y + largura + veloc < Xing.xing.largura) {
+				y += veloc;
+			}
+			else{
+				y = Xing.xing.largura - largura;
+		}
+		
+		}
+		
+	}
+
+}
