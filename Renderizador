@@ -1,0 +1,17 @@
+package xingpong;
+
+import javax.swing.JPanel; //serve de conteiner para outros componentes da interface
+import java.awt.Graphics;  //para desenhar os gráficos
+import java.awt.Graphics2D; 
+
+public class Renderizador extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponents(g);
+		Xing.xing.renderizador((Graphics2D) g);
+	}
+
+}
