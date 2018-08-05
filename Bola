@@ -1,0 +1,140 @@
+package xingpong;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Random;
+
+public class Bola
+{
+
+	public int x, y, largura = 20, altura = 20;
+
+	public int moverx, movery;
+
+	public Random random;
+
+	private Xing xing;
+
+	public int Hits;
+
+	public Bola(Xing xing)
+	{
+		this.xing = xing;
+
+		this.random = new Random();
+
+		att();
+	}
+
+	public void update(Barra barra1, Barra barra2)
+	{
+		int veloc = 5;
+
+		this.x += moverx * veloc;
+		this.y += movery * veloc;
+
+		if (this.y + largura - moverx > xing.largura || this.y + movery < 0)
+		{
+			if (this.movery < 0)
+			{
+				this.y = 0;
+				this.movery = random.nextInt(4);
+
+				if (movery == 0)
+				{
+					movery = 1;
+				}
+			}
+			else
+			{
+				this.movery = -random.nextInt(4);
+				this.y = xing.altura - altura;
+
+				if (movery == 0)
+				{
+					movery = -1;
+				}
+			}
+		}
+
+		if (checarColisao(barra1) == 1)
+		{
+			this.moverx = 1 + (Hits / 5);
+			this.movery = -2 + random.nextInt(4);
+
+			if (movery == 0)
+			{
+				movery = 1;
+			}
+
+			Hits++;
+		}
+		else if (checarColisao(barra2) == 1)
+		{
+			this.moverx = -1 - (Hits / 5);
+			this.movery = -2 + random.nextInt(4);
+
+			if (movery == 0)
+			{
+				movery = 1;
+			}
+
+			Hits++;
+		}
+
+		if (checarColisao(barra1) == 2)
+		{
+			barra2.pontos++;   //player 2 pontua
+			att();
+		}
+		else if (checarColisao(barra2) == 2)
+		{
+			barra1.pontos++;   //player 1 pontua
+			att();
+		}
+	}
+
+	public void att()
+	{
+		this.Hits = 0;
+		this.x = xing.largura / 2 - this.largura / 2;
+		this.y = xing.altura / 2 - this.altura / 2;
+
+		this.movery = -2 + random.nextInt(4);
+
+		if (movery == 0)
+		{
+			movery = 1;
+		}
+
+		if (random.nextBoolean())
+		{
+			moverx = 1;
+		}
+		else
+		{
+			moverx = -1;
+		}
+	}
+
+	public int checarColisao(Barra barra)
+	{
+		if (this.x < barra.x + barra.largura && this.x + largura > barra.x && this.y < barra.y + barra.altura && this.y + altura > barra.y)
+		{
+			return 1; //rebateu
+		}
+		else if ((barra.x > x && barra.barraNumero == 1) || (barra.x < x - largura && barra.barraNumero == 2))
+		{
+			return 2; //pontua
+		}
+
+		return 0; //vcs brasileiros feijoada nada acontece
+	}
+
+	public void render(Graphics g)
+	{
+		g.setColor(Color.WHITE);
+		g.fillOval(x, y, largura, altura);
+	}
+
+}
